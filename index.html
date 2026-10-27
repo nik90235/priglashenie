@@ -14,7 +14,6 @@ body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
 .poster{width:min(100vw,450px,75svh);aspect-ratio:3/4;container-type:inline-size;position:relative;overflow:hidden;background:#0a0a09 url('background.png') center/100% 100% no-repeat;isolation:isolate}
 .poster::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center, transparent 30%,rgba(0,0,0,.16) 100%);z-index:0}
 .poster>*{position:absolute;z-index:1}.center{text-align:center;left:0;width:100%;margin:0}
-/* Uniform typographic rhythm and mathematically centered text columns */
 .poster p,.poster h1,.poster h2{padding:0;text-wrap:balance}
 .poster p{letter-spacing:0;hyphens:none}
 
@@ -29,7 +28,7 @@ body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
 .image-button:hover{transform:scale(1.035);filter:brightness(1.08)}.image-button:active{transform:scale(.98)}.image-button:focus-visible{outline:3px solid #ffd68d;outline-offset:3px;border-radius:35px}
 .image-button img{display:block;width:100%;height:auto}
 .open-button{top:82%;left:23.4%;width:53.2%}
-/* Final layout: four isolated, evenly spaced rows inside the outline. */
+
 .top-logo{top:4.6%;color:#d00000;font-family:Boycott,Impact,sans-serif;font-size:5.2cqw;line-height:1.05}
 .top-logo span{display:block;line-height:1.05}
 .top-party{top:6.3%;left:55%;font-family:Shlapak,cursive;font-size:3.8cqw;color:#ffdb90;transform:rotate(-13deg)}
@@ -41,28 +40,35 @@ body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
 .detail.where p{line-height:1.3}
 .final-copy{top:69.7%;left:14%;width:72%;font-size:2.78cqw;line-height:1.4;font-weight:300;text-align:center}
 .accept-button{top:82%;left:19%;width:62%}
-/* Cinematic entrance for both posters; content never shifts its final alignment. */
-@keyframes scene-reveal{0%{opacity:0;filter:blur(14px) brightness(.25);clip-path:inset(0 48% 0 48%)}55%{opacity:1;filter:blur(2px) brightness(1.55);clip-path:inset(0 0 0 0)}100%{opacity:1;filter:blur(0) brightness(1);clip-path:inset(0 0 0 0)}}
-@keyframes second-reveal{0%{opacity:0;transform:scale(1.11);filter:blur(16px) brightness(2.2)}65%{opacity:1;filter:blur(2px) brightness(1.3)}100%{opacity:1;transform:scale(1);filter:blur(0) brightness(1)}}
-@keyframes title-rise{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
-#intro-screen .poster{animation:scene-reveal 1.4s cubic-bezier(.2,.7,.2,1) both}
-#intro-screen .main-title,#intro-screen .night-title,#intro-screen .warn,#intro-screen .intro-copy,#intro-screen .open-button{animation:title-rise .8s ease both;animation-delay:1.05s}
-#intro-screen .night-title{animation-delay:1.18s}
-#intro-screen .warn{animation-delay:1.32s}
-#intro-screen .intro-copy{animation-delay:1.45s}
-#intro-screen .open-button{animation-delay:1.6s}
-#invitation-screen:not(.hidden) .poster{animation:second-reveal 1.25s cubic-bezier(.2,.75,.2,1) both}
-#screamer-screen{position:fixed;inset:0;z-index:50;background:#000;display:grid;place-items:center;overflow:hidden}
-.screamer-art{width:100%;height:100%;display:grid;place-items:center;position:relative}
-.screamer-art svg{width:min(100vw,650px);height:auto;animation:monster-pulse .35s steps(2) infinite}
-.screamer-art h2{position:absolute;color:#f23;font:900 clamp(36px,10vw,90px) Georgia,serif;text-shadow:0 0 15px red,0 0 35px #900}
-@keyframes monster-pulse{50%{transform:scale(1.15)}}
-@keyframes shake{0%{transform:translate(1px,1px) rotate(0)}25%{transform:translate(-4px,-2px) rotate(-2deg)}50%{transform:translate(4px,2px) rotate(2deg)}75%{transform:translate(-2px,2px) rotate(-1deg)}100%{transform:translate(2px,-2px) rotate(1deg)}}
-@keyframes strobe{0%,100%{background-color:#000}50%{background-color:#600}}
-body.shake-active{animation:shake .08s infinite}body.strobe-active{animation:strobe .1s infinite}
+
+/* Плавное и медленное появление фона и текста по очереди */
+@keyframes scene-reveal{0%{opacity:0;filter:blur(18px) brightness(.15);clip-path:inset(0 45% 0 45%)}60%{opacity:1;filter:blur(3px) brightness(1.2);clip-path:inset(0 0 0 0)}100%{opacity:1;filter:blur(0) brightness(1);clip-path:inset(0 0 0 0)}}
+@keyframes second-reveal{0%{opacity:0;transform:scale(1.15);filter:blur(18px) brightness(2)}100%{opacity:1;transform:scale(1);filter:blur(0) brightness(1)}}
+@keyframes title-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+#intro-screen .poster{animation:scene-reveal 1.8s cubic-bezier(.2,.6,.2,1) both}
+
+#intro-screen .eyebrow{animation:title-rise .9s ease both;animation-delay:0.5s}
+#intro-screen .main-title{animation:title-rise .9s ease both;animation-delay:0.8s}
+#intro-screen .night-title{animation:title-rise .9s ease both;animation-delay:1.0s}
+#intro-screen .glow, #intro-screen .party{animation:title-rise .9s ease both;animation-delay:1.1s}
+#intro-screen .warn{animation:title-rise .9s ease both;animation-delay:1.3s}
+#intro-screen .intro-copy{animation:title-rise .9s ease both;animation-delay:1.5s}
+#intro-screen .open-button{animation:title-rise .9s ease both;animation-delay:1.7s}
+
+#invitation-screen:not(.hidden) .poster{animation:second-reveal 1.4s cubic-bezier(.2,.7,.2,1) both}
+
+/* Гарантированный показ гифки на черном фоне во весь экран */
+#screamer-screen{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.screamer-photo{width:100vw;height:100vh;object-fit:contain;background:#000;animation:monster-pulse .12s infinite alternate}
+@keyframes monster-pulse{0%{transform:scale(1)}100%{transform:scale(1.06)}}
+
+@keyframes shake{0%{transform:translate(1px,1px) rotate(0)}25%{transform:translate(-7px,-5px) rotate(-4deg)}50%{transform:translate(7px,5px) rotate(4deg)}75%{transform:translate(-5px,5px) rotate(-2deg)}100%{transform:translate(5px,-5px) rotate(2deg)}}
+@keyframes strobe{0%,100%{background-color:#000}50%{background-color:#900}}
+body.shake-active{animation:shake .05s infinite}body.strobe-active{animation:strobe .07s infinite}
 .particle{position:fixed;top:-60px;pointer-events:none;z-index:100;animation:fall linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg) scale(.5);opacity:0}}
 .status{position:fixed;z-index:110;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:90vw;width:max-content;background:#1d100d;color:#ffe5b0;padding:14px 20px;border:1px solid #ba241c;border-radius:14px;text-align:center;box-shadow:0 8px 30px #000a;font-size:16px}
-@media(prefers-reduced-motion:reduce){.image-button,.screamer-art svg,#intro-screen .poster,#intro-screen .poster>*,#invitation-screen .poster{animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){.image-button,.screamer-photo,#intro-screen .poster,#intro-screen .poster>*,#invitation-screen .poster{animation:none!important;transition:none!important}}
 </style></head><body>
 <main id="intro-screen" class="screen"><section class="poster" aria-label="Приглашение на хэллоуинскую вечеринку">
 <div class="eyebrow">Приглашение</div>
@@ -72,9 +78,11 @@ body.shake-active{animation:shake .08s infinite}body.strobe-active{animation:str
 <p class="intro-copy center">Тебя подозревают в любви к вкусной еде, весёлым конкурсам и загадочным приключениям. Поэтому 31 октября твоё присутствие на нашей вечеринке обязательно!</p>
 <button class="image-button open-button" id="open-btn" type="button" aria-label="Ознакомиться с делом"><img src="button-open.png" alt="Ознакомиться с делом"></button>
 </section></main>
-<div id="screamer-screen" class="hidden" aria-hidden="true"><div class="screamer-art">
-<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M100 15 C40 15 20 60 20 100 C20 140 40 180 60 185 L60 195 L80 195 L80 185 L100 185 L100 195 L120 195 L120 185 L140 185 L140 195 L160 185 C180 180 180 140 180 100 C180 60 160 15 100 15 Z M60 80 C70 80 75 95 60 105 C45 95 50 80 60 80 Z M140 80 C150 80 155 95 140 105 C125 95 130 80 140 80 Z M100 120 L115 145 L85 145 Z" fill="#900"/><circle cx="60" cy="92" r="8" fill="#fff"/><circle cx="140" cy="92" r="8" fill="#fff"/><circle cx="60" cy="92" r="3" fill="#000"/><circle cx="140" cy="92" r="3" fill="#000"/></svg>
-<h2>БУ-У-У! 🩸</h2></div></div>
+
+<div id="screamer-screen" class="hidden" aria-hidden="true">
+  <img src="screamer.gif" alt="" class="screamer-photo">
+</div>
+
 <section id="invitation-screen" class="screen hidden"><div class="poster" aria-label="Подробности вечеринки">
 <div class="top-logo center"><span>ВЕСЕЛОВА</span><span>НОЧЬ</span></div><div class="top-party">party</div>
 <div class="details-border"></div>
@@ -88,7 +96,89 @@ body.shake-active{animation:shake .08s infinite}body.strobe-active{animation:str
 <div id="status-message" class="status hidden" role="status" aria-live="polite"></div>
 <script>
 let opened=false,accepted=false;
-function playScreamSound(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ctx=new AC(),size=Math.floor(ctx.sampleRate*1.5),buffer=ctx.createBuffer(1,size,ctx.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<size;i++)data[i]=Math.random()*2-1;const noise=ctx.createBufferSource();noise.buffer=buffer;const filter=ctx.createBiquadFilter();filter.type='bandpass';filter.frequency.value=1000;filter.Q.value=3;const gain=ctx.createGain();gain.gain.setValueAtTime(.01,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.8,ctx.currentTime+.1);gain.gain.exponentialRampToValueAtTime(.01,ctx.currentTime+1.5);noise.connect(filter);filter.connect(gain);gain.connect(ctx.destination);const osc=ctx.createOscillator(),og=ctx.createGain();osc.type='sawtooth';osc.frequency.setValueAtTime(800,ctx.currentTime);osc.frequency.exponentialRampToValueAtTime(3200,ctx.currentTime+.3);osc.frequency.linearRampToValueAtTime(600,ctx.currentTime+1.4);og.gain.setValueAtTime(.01,ctx.currentTime);og.gain.linearRampToValueAtTime(.5,ctx.currentTime+.1);og.gain.exponentialRampToValueAtTime(.01,ctx.currentTime+1.5);osc.connect(og);og.connect(ctx.destination);noise.start();osc.start();noise.stop(ctx.currentTime+1.5);osc.stop(ctx.currentTime+1.5);setTimeout(()=>ctx.close().catch(()=>{}),2000)}catch(e){console.warn('Звук недоступен',e)}}
-document.getElementById('open-btn').addEventListener('click',()=>{if(opened)return;opened=true;playScreamSound();setTimeout(()=>{document.getElementById('intro-screen').classList.add('hidden');const scr=document.getElementById('screamer-screen');scr.classList.remove('hidden');scr.setAttribute('aria-hidden','false');document.body.classList.add('shake-active','strobe-active');setTimeout(()=>{document.body.classList.remove('shake-active','strobe-active');scr.classList.add('hidden');scr.setAttribute('aria-hidden','true');document.getElementById('invitation-screen').classList.remove('hidden')},1800)},300)});
+
+function playScreamSound(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return;
+    const ctx=new AC();
+    
+    const subOsc=ctx.createOscillator();
+    const subGain=ctx.createGain();
+    subOsc.type='sawtooth';
+    subOsc.frequency.setValueAtTime(60,ctx.currentTime);
+    subOsc.frequency.exponentialRampToValueAtTime(150,ctx.currentTime+1.8);
+    subGain.gain.setValueAtTime(0.8,ctx.currentTime);
+    subGain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+2.0);
+    subOsc.connect(subGain);
+    subGain.connect(ctx.destination);
+    
+    const screamer=ctx.createOscillator();
+    const screamerGain=ctx.createGain();
+    screamer.type='square';
+    screamer.frequency.setValueAtTime(800,ctx.currentTime);
+    screamer.frequency.setValueAtTime(2400,ctx.currentTime+0.1);
+    screamer.frequency.setValueAtTime(1200,ctx.currentTime+0.3);
+    screamer.frequency.setValueAtTime(3200,ctx.currentTime+0.5);
+    screamer.frequency.exponentialRampToValueAtTime(300,ctx.currentTime+1.8);
+    
+    screamerGain.gain.setValueAtTime(0.01,ctx.currentTime);
+    screamerGain.gain.linearRampToValueAtTime(0.7,ctx.currentTime+0.05);
+    screamerGain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+1.8);
+    screamer.connect(screamerGain);
+    screamerGain.connect(ctx.destination);
+    
+    const bufferSize=ctx.sampleRate*2;
+    const noiseBuffer=ctx.createBuffer(1,bufferSize,ctx.sampleRate);
+    const output=noiseBuffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++){output[i]=Math.random()*2-1;}
+    const whiteNoise=ctx.createBufferSource();
+    whiteNoise.buffer=noiseBuffer;
+    
+    const filter=ctx.createBiquadFilter();
+    filter.type='bandpass';
+    filter.frequency.setValueAtTime(1200,ctx.currentTime);
+    filter.Q.value=5;
+    
+    const noiseGain=ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.9,ctx.currentTime);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+1.8);
+    
+    whiteNoise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+    
+    subOsc.start();
+    screamer.start();
+    whiteNoise.start();
+    
+    subOsc.stop(ctx.currentTime+2.0);
+    screamer.stop(ctx.currentTime+2.0);
+    whiteNoise.stop(ctx.currentTime+2.0);
+    
+    setTimeout(()=>ctx.close().catch(()=>{}),2500);
+  }catch(e){console.warn('Звук недоступен',e)}
+}
+
+document.getElementById('open-btn').addEventListener('click',()=>{
+  if(opened)return;
+  opened=true;
+  playScreamSound();
+  setTimeout(()=>{
+    document.getElementById('intro-screen').classList.add('hidden');
+    const scr=document.getElementById('screamer-screen');
+    scr.classList.remove('hidden');
+    scr.setAttribute('aria-hidden','false');
+    document.body.classList.add('shake-active','strobe-active');
+    
+    setTimeout(()=>{
+      document.body.classList.remove('shake-active','strobe-active');
+      scr.classList.add('hidden');
+      scr.setAttribute('aria-hidden','true');
+      document.getElementById('invitation-screen').classList.remove('hidden');
+    },2200);
+  },300);
+});
+
 document.getElementById('rsvp-btn').addEventListener('click',()=>{if(accepted)return;accepted=true;const s=document.getElementById('status-message');s.textContent='🎉 Ты в деле! Ждём тебя на вечеринке!';s.classList.remove('hidden');setTimeout(()=>s.classList.add('hidden'),5500);for(let i=0;i<45;i++){let p=document.createElement('div');p.className='particle';p.textContent=['🎃','👻','🦇','💀','🍬','🕷️'][Math.floor(Math.random()*6)];p.style.left=Math.random()*100+'vw';p.style.fontSize=(22+Math.random()*20)+'px';p.style.animationDuration=(Math.random()*2+1.5)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),3800)}});
 </script></body></html>
