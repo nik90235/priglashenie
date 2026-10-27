@@ -15,7 +15,6 @@
         body {
             background-color: #050303;
             color: #ffffff;
-            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,87 +22,46 @@
             overflow-x: hidden;
         }
 
-        .app-container {
+        .invite-wrapper {
             width: 100%;
-            max-width: 450px;
-            min-height: 100vh;
+            max-width: 450px; /* Ограничение ширины для ПК, чтобы на мониторах макет смотрелся аккуратно */
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0 auto;
         }
 
         .screen {
             display: none;
             width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
             opacity: 0;
             transition: opacity 0.4s ease-in-out;
         }
 
         .screen.active {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
+            display: block;
             opacity: 1;
         }
 
-        /* Подложка Экрана 1 */
-        .screen-1-bg {
+        /* Картинка масштабируется пропорционально и никогда не обрезается */
+        .invite-img {
             width: 100%;
-            min-height: 100vh;
-            background: #080505 url('start.jpg') center top / cover no-repeat;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
+            height: auto;
+            display: block;
         }
 
-        /* Подложка Экрана 2 */
-        .screen-2-bg {
-            width: 100%;
-            min-height: 100vh;
-            background: #080505 url('end.jpg') center top / cover no-repeat;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        /* Интерактивные прозрачные кликабельные зоны поверх дизайна */
-        .btn-overlay {
-            width: 85%;
-            height: 56px;
-            margin-bottom: 40px;
-            cursor: pointer;
-            border-radius: 35px;
+        /* Прозрачная кликабельная область точно поверх красной кнопки на картинке */
+        .btn-target {
+            position: absolute;
+            bottom: 6.5%; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 12%;
             background: transparent;
             border: none;
-            outline: none;
+            cursor: pointer;
         }
 
-        /* Резервный CSS-дизайн если картинки не загружены */
-        .fallback-card {
-            width: 100%;
-            background: rgba(10, 4, 4, 0.9);
-            border: 1.5px solid #D70000;
-            border-radius: 24px;
-            padding: 25px 20px;
-            box-shadow: 0 0 20px rgba(215,0,0,0.4);
-            text-align: center;
-            margin-top: auto;
-            margin-bottom: 20px;
-        }
-
-        /* Скример */
+        /* СКРИМЕР */
         #screamer {
             position: fixed;
             top: 0;
@@ -139,25 +97,25 @@
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="invite-wrapper">
         <!-- ЭКРАН 1 -->
         <div id="screen1" class="screen active">
-            <div class="screen-1-bg">
-                <div style="flex-grow: 1;"></div>
-                <button class="btn-overlay" onclick="runScreamer()"></button>
+            <div style="position: relative;">
+                <img src="start.jpg" alt="Приглашение" class="invite-img">
+                <button class="btn-target" onclick="runScreamer()"></button>
             </div>
         </div>
 
         <!-- ЭКРАН 2 -->
         <div id="screen2" class="screen">
-            <div class="screen-2-bg">
-                <div style="flex-grow: 1;"></div>
-                <button class="btn-overlay" onclick="accept()"></button>
+            <div style="position: relative;">
+                <img src="end.jpg" alt="Детали вечеринки" class="invite-img">
+                <button class="btn-target" onclick="accept()"></button>
             </div>
         </div>
     </div>
 
-    <!-- СКРИМЕР -->
+    <!-- СКРИМЕР СО ЗВУКОМ -->
     <div id="screamer">
         <svg class="monster-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <rect width="200" height="200" fill="#000"/>
