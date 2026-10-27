@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080807"><title>Веселова ночь — Halloween Party</title>
+<style>
+@font-face{font-family:Boycott;src:url('rusboycott.ttf') format('truetype');font-display:swap}
+@font-face{font-family:Shlapak;src:url('shlapak.otf') format('opentype');font-display:swap}
+@font-face{font-family:OpenCond;src:url('open-sans-light.ttf') format('truetype');font-weight:300;font-display:swap}
+@font-face{font-family:OpenCond;src:url('open-sans-semibold.ttf') format('truetype');font-weight:600;font-display:swap}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080807;color:#ffd68d}
+body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
+.hidden{display:none!important}.screen{min-height:100svh;display:grid;place-items:center;padding:8px 0}
+.poster{width:min(100vw,450px,75svh);aspect-ratio:3/4;container-type:inline-size;position:relative;overflow:hidden;background:#0a0a09 url('background.png') center/100% 100% no-repeat;isolation:isolate}
+.poster::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center, transparent 30%,rgba(0,0,0,.16) 100%);z-index:0}
+.poster>*{position:absolute;z-index:1}.center{text-align:center;left:0;width:100%;margin:0}
+/* Uniform typographic rhythm and mathematically centered text columns */
+.poster p,.poster h1,.poster h2{padding:0;text-wrap:balance}
+.poster p{letter-spacing:0;hyphens:none}
+
+.eyebrow{top:6.7%;left:35.4%;width:29%;height:6.4%;display:grid;place-items:center;border:1px solid #ad0000;border-radius:999px;color:#e00000;font-family:OpenCond,sans-serif;font-weight:300;font-size:4.3cqw;line-height:1.25}
+.main-title{top:19%;color:#d00000;font-family:Boycott,Impact,sans-serif;font-size:20cqw;line-height:.84;letter-spacing:-.6cqw;white-space:nowrap}
+.night-title{top:34.0%;color:#d00000;font-family:Boycott,Impact,sans-serif;font-size:19cqw;line-height:1;white-space:nowrap}
+.glow{top:28%;left:56%;width:37%;height:auto;opacity:.9;mix-blend-mode:screen;z-index:1}
+.party{top:29%;left:60%;width:35%;font-family:Shlapak,cursive;font-size:15cqw;transform:rotate(-11deg);color:#ffdb90;line-height:1;text-shadow:0 0 7px #efaa52;z-index:2}
+.warn{top:51.7%;left:12%;width:76%;font-weight:600;font-size:3.65cqw;line-height:1.4;text-align:center}
+.intro-copy{top:61.2%;left:14%;width:72%;font-size:3.35cqw;line-height:1.4;font-weight:300;text-align:center}
+.image-button{border:0;background:none;padding:0;cursor:pointer;display:block;touch-action:manipulation;transition:transform .15s ease,filter .15s ease}
+.image-button:hover{transform:scale(1.035);filter:brightness(1.08)}.image-button:active{transform:scale(.98)}.image-button:focus-visible{outline:3px solid #ffd68d;outline-offset:3px;border-radius:35px}
+.image-button img{display:block;width:100%;height:auto}
+.open-button{top:82%;left:23.4%;width:53.2%}
+/* Final layout: four isolated, evenly spaced rows inside the outline. */
+.top-logo{top:4.6%;color:#d00000;font-family:Boycott,Impact,sans-serif;font-size:5.2cqw;line-height:1.05}
+.top-logo span{display:block;line-height:1.05}
+.top-party{top:6.3%;left:55%;font-family:Shlapak,cursive;font-size:3.8cqw;color:#ffdb90;transform:rotate(-13deg)}
+.details-border{top:14.2%;left:18.2%;width:63.6%;height:52%;border:1px solid #b90000;border-radius:5cqw}
+.details-list{position:absolute;top:16.8%;left:19%;width:62%;height:48%;display:grid;grid-template-rows:1fr 1.3fr 1fr 1fr;align-items:center;text-align:center;gap:0}
+.detail{position:relative;left:auto;width:100%;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 1.4cqw;margin:0;gap:1.5cqw}
+.detail h2{font-family:Boycott,Impact,sans-serif;font-size:6.0cqw;line-height:1.2;margin:0;color:#d00000;font-weight:normal;text-align:center;white-space:nowrap;max-width:100%}
+.detail p{font-weight:600;font-size:3.5cqw;line-height:1.27;margin:0;text-align:center;width:100%;text-wrap:initial}
+.detail.where p{line-height:1.3}
+.final-copy{top:69.7%;left:14%;width:72%;font-size:2.78cqw;line-height:1.4;font-weight:300;text-align:center}
+.accept-button{top:82%;left:19%;width:62%}
+/* Cinematic entrance for both posters; content never shifts its final alignment. */
+@keyframes scene-reveal{0%{opacity:0;filter:blur(14px) brightness(.25);clip-path:inset(0 48% 0 48%)}55%{opacity:1;filter:blur(2px) brightness(1.55);clip-path:inset(0 0 0 0)}100%{opacity:1;filter:blur(0) brightness(1);clip-path:inset(0 0 0 0)}}
+@keyframes second-reveal{0%{opacity:0;transform:scale(1.11);filter:blur(16px) brightness(2.2)}65%{opacity:1;filter:blur(2px) brightness(1.3)}100%{opacity:1;transform:scale(1);filter:blur(0) brightness(1)}}
+@keyframes title-rise{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
+#intro-screen .poster{animation:scene-reveal 1.4s cubic-bezier(.2,.7,.2,1) both}
+#intro-screen .main-title,#intro-screen .night-title,#intro-screen .warn,#intro-screen .intro-copy,#intro-screen .open-button{animation:title-rise .8s ease both;animation-delay:1.05s}
+#intro-screen .night-title{animation-delay:1.18s}
+#intro-screen .warn{animation-delay:1.32s}
+#intro-screen .intro-copy{animation-delay:1.45s}
+#intro-screen .open-button{animation-delay:1.6s}
+#invitation-screen:not(.hidden) .poster{animation:second-reveal 1.25s cubic-bezier(.2,.75,.2,1) both}
+#screamer-screen{position:fixed;inset:0;z-index:50;background:#000;display:grid;place-items:center;overflow:hidden}
+.screamer-art{width:100%;height:100%;display:grid;place-items:center;position:relative}
+.screamer-art svg{width:min(100vw,650px);height:auto;animation:monster-pulse .35s steps(2) infinite}
+.screamer-art h2{position:absolute;color:#f23;font:900 clamp(36px,10vw,90px) Georgia,serif;text-shadow:0 0 15px red,0 0 35px #900}
+@keyframes monster-pulse{50%{transform:scale(1.15)}}
+@keyframes shake{0%{transform:translate(1px,1px) rotate(0)}25%{transform:translate(-4px,-2px) rotate(-2deg)}50%{transform:translate(4px,2px) rotate(2deg)}75%{transform:translate(-2px,2px) rotate(-1deg)}100%{transform:translate(2px,-2px) rotate(1deg)}}
+@keyframes strobe{0%,100%{background-color:#000}50%{background-color:#600}}
+body.shake-active{animation:shake .08s infinite}body.strobe-active{animation:strobe .1s infinite}
+.particle{position:fixed;top:-60px;pointer-events:none;z-index:100;animation:fall linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg) scale(.5);opacity:0}}
+.status{position:fixed;z-index:110;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:90vw;width:max-content;background:#1d100d;color:#ffe5b0;padding:14px 20px;border:1px solid #ba241c;border-radius:14px;text-align:center;box-shadow:0 8px 30px #000a;font-size:16px}
+@media(prefers-reduced-motion:reduce){.image-button,.screamer-art svg,#intro-screen .poster,#intro-screen .poster>*,#invitation-screen .poster{animation:none!important;transition:none!important}}
+</style></head><body>
+<main id="intro-screen" class="screen"><section class="poster" aria-label="Приглашение на хэллоуинскую вечеринку">
+<div class="eyebrow">Приглашение</div>
+<h1 class="center main-title">ВЕСЕЛОВА</h1><div class="center night-title">НОЧЬ</div>
+<img class="glow" src="glow.png" alt="" aria-hidden="true"><div class="party">party</div>
+<p class="center warn">Внимание!<br>Ты попал в список подозреваемых...</p>
+<p class="intro-copy center">Тебя подозревают в любви к вкусной еде, весёлым конкурсам и загадочным приключениям. Поэтому 31 октября твоё присутствие на нашей вечеринке обязательно!</p>
+<button class="image-button open-button" id="open-btn" type="button" aria-label="Ознакомиться с делом"><img src="button-open.png" alt="Ознакомиться с делом"></button>
+</section></main>
+<div id="screamer-screen" class="hidden" aria-hidden="true"><div class="screamer-art">
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M100 15 C40 15 20 60 20 100 C20 140 40 180 60 185 L60 195 L80 195 L80 185 L100 185 L100 195 L120 195 L120 185 L140 185 L140 195 L160 185 C180 180 180 140 180 100 C180 60 160 15 100 15 Z M60 80 C70 80 75 95 60 105 C45 95 50 80 60 80 Z M140 80 C150 80 155 95 140 105 C125 95 130 80 140 80 Z M100 120 L115 145 L85 145 Z" fill="#900"/><circle cx="60" cy="92" r="8" fill="#fff"/><circle cx="140" cy="92" r="8" fill="#fff"/><circle cx="60" cy="92" r="3" fill="#000"/><circle cx="140" cy="92" r="3" fill="#000"/></svg>
+<h2>БУ-У-У! 🩸</h2></div></div>
+<section id="invitation-screen" class="screen hidden"><div class="poster" aria-label="Подробности вечеринки">
+<div class="top-logo center"><span>ВЕСЕЛОВА</span><span>НОЧЬ</span></div><div class="top-party">party</div>
+<div class="details-border"></div>
+<div class="details-list"><div class="detail when"><h2>КОГДА</h2><p>31 октября в 17:00</p></div>
+<div class="detail where"><h2>АДРЕС</h2><p>Ул. Фатыха Амирхана, 31;<br>кв. 41 — 7 этаж</p></div>
+<div class="detail dress"><h2>ДРЕСС-КОД</h2><p>Костюм!</p></div>
+<div class="detail condition"><h2>УСЛОВИЕ</h2><p>Страшное блюдо</p></div></div>
+<p class="center final-copy">Все тайны этой ночи раскроются только тем, кто осмелится прийти. А пока готовь свой образ, запасайся хорошим настроением и помни: самые интересные приключения начинаются после захода солнца...</p>
+<button class="image-button accept-button" id="rsvp-btn" type="button" aria-label="Принимаю приглашение"><img src="button-accept.png" alt="Принимаю приглашение"></button>
+</div></section>
+<div id="status-message" class="status hidden" role="status" aria-live="polite"></div>
+<script>
+let opened=false,accepted=false;
+function playScreamSound(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ctx=new AC(),size=Math.floor(ctx.sampleRate*1.5),buffer=ctx.createBuffer(1,size,ctx.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<size;i++)data[i]=Math.random()*2-1;const noise=ctx.createBufferSource();noise.buffer=buffer;const filter=ctx.createBiquadFilter();filter.type='bandpass';filter.frequency.value=1000;filter.Q.value=3;const gain=ctx.createGain();gain.gain.setValueAtTime(.01,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.8,ctx.currentTime+.1);gain.gain.exponentialRampToValueAtTime(.01,ctx.currentTime+1.5);noise.connect(filter);filter.connect(gain);gain.connect(ctx.destination);const osc=ctx.createOscillator(),og=ctx.createGain();osc.type='sawtooth';osc.frequency.setValueAtTime(800,ctx.currentTime);osc.frequency.exponentialRampToValueAtTime(3200,ctx.currentTime+.3);osc.frequency.linearRampToValueAtTime(600,ctx.currentTime+1.4);og.gain.setValueAtTime(.01,ctx.currentTime);og.gain.linearRampToValueAtTime(.5,ctx.currentTime+.1);og.gain.exponentialRampToValueAtTime(.01,ctx.currentTime+1.5);osc.connect(og);og.connect(ctx.destination);noise.start();osc.start();noise.stop(ctx.currentTime+1.5);osc.stop(ctx.currentTime+1.5);setTimeout(()=>ctx.close().catch(()=>{}),2000)}catch(e){console.warn('Звук недоступен',e)}}
+document.getElementById('open-btn').addEventListener('click',()=>{if(opened)return;opened=true;playScreamSound();setTimeout(()=>{document.getElementById('intro-screen').classList.add('hidden');const scr=document.getElementById('screamer-screen');scr.classList.remove('hidden');scr.setAttribute('aria-hidden','false');document.body.classList.add('shake-active','strobe-active');setTimeout(()=>{document.body.classList.remove('shake-active','strobe-active');scr.classList.add('hidden');scr.setAttribute('aria-hidden','true');document.getElementById('invitation-screen').classList.remove('hidden')},1800)},300)});
+document.getElementById('rsvp-btn').addEventListener('click',()=>{if(accepted)return;accepted=true;const s=document.getElementById('status-message');s.textContent='🎉 Ты в деле! Ждём тебя на вечеринке!';s.classList.remove('hidden');setTimeout(()=>s.classList.add('hidden'),5500);for(let i=0;i<45;i++){let p=document.createElement('div');p.className='particle';p.textContent=['🎃','👻','🦇','💀','🍬','🕷️'][Math.floor(Math.random()*6)];p.style.left=Math.random()*100+'vw';p.style.fontSize=(22+Math.random()*20)+'px';p.style.animationDuration=(Math.random()*2+1.5)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),3800)}});
+</script></body></html>
