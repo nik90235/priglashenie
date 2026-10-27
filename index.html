@@ -58,9 +58,9 @@ body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
 
 #invitation-screen:not(.hidden) .poster{animation:second-reveal 1.4s cubic-bezier(.2,.7,.2,1) both}
 
-/* Гарантированный показ гифки на черном фоне во весь экран */
+/* Экран скримера с видеофайлом mp4 */
 #screamer-screen{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.screamer-photo{width:100vw;height:100vh;object-fit:contain;background:#000;animation:monster-pulse .12s infinite alternate}
+.screamer-video{width:100vw;height:100vh;object-fit:cover;background:#000;animation:monster-pulse .12s infinite alternate}
 @keyframes monster-pulse{0%{transform:scale(1)}100%{transform:scale(1.06)}}
 
 @keyframes shake{0%{transform:translate(1px,1px) rotate(0)}25%{transform:translate(-7px,-5px) rotate(-4deg)}50%{transform:translate(7px,5px) rotate(4deg)}75%{transform:translate(-5px,5px) rotate(-2deg)}100%{transform:translate(5px,-5px) rotate(2deg)}}
@@ -68,7 +68,7 @@ body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
 body.shake-active{animation:shake .05s infinite}body.strobe-active{animation:strobe .07s infinite}
 .particle{position:fixed;top:-60px;pointer-events:none;z-index:100;animation:fall linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg) scale(.5);opacity:0}}
 .status{position:fixed;z-index:110;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:90vw;width:max-content;background:#1d100d;color:#ffe5b0;padding:14px 20px;border:1px solid #ba241c;border-radius:14px;text-align:center;box-shadow:0 8px 30px #000a;font-size:16px}
-@media(prefers-reduced-motion:reduce){.image-button,.screamer-photo,#intro-screen .poster,#intro-screen .poster>*,#invitation-screen .poster{animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){.image-button,.screamer-video,#intro-screen .poster,#intro-screen .poster>*,#invitation-screen .poster{animation:none!important;transition:none!important}}
 </style></head><body>
 <main id="intro-screen" class="screen"><section class="poster" aria-label="Приглашение на хэллоуинскую вечеринку">
 <div class="eyebrow">Приглашение</div>
@@ -80,7 +80,7 @@ body.shake-active{animation:shake .05s infinite}body.strobe-active{animation:str
 </section></main>
 
 <div id="screamer-screen" class="hidden" aria-hidden="true">
-  <img src="screamer.gif" alt="" class="screamer-photo">
+  <video src="screamer.mp4" class="screamer-video" autoplay muted playsinline></video>
 </div>
 
 <section id="invitation-screen" class="screen hidden"><div class="poster" aria-label="Подробности вечеринки">
@@ -164,9 +164,14 @@ document.getElementById('open-btn').addEventListener('click',()=>{
   if(opened)return;
   opened=true;
   playScreamSound();
+  
+  const scr=document.getElementById('screamer-screen');
+  const vid=scr.querySelector('video');
+  vid.currentTime=0; // сбрасываем видео на начало
+  vid.play().catch(()=>{}); // запускаем воспроизведение
+
   setTimeout(()=>{
     document.getElementById('intro-screen').classList.add('hidden');
-    const scr=document.getElementById('screamer-screen');
     scr.classList.remove('hidden');
     scr.setAttribute('aria-hidden','false');
     document.body.classList.add('shake-active','strobe-active');
@@ -175,6 +180,7 @@ document.getElementById('open-btn').addEventListener('click',()=>{
       document.body.classList.remove('shake-active','strobe-active');
       scr.classList.add('hidden');
       scr.setAttribute('aria-hidden','true');
+      vid.pause(); // останавливаем видео при скрытии
       document.getElementById('invitation-screen').classList.remove('hidden');
     },2200);
   },300);
