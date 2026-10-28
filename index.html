@@ -57,7 +57,7 @@ body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
 
 #invitation-screen:not(.hidden) .poster{animation:second-reveal 1.4s cubic-bezier(.2,.7,.2,1) both}
 
-/* Мгновенный скример с видео во весь экран */
+/* Экран скримера с идеальной синхронизацией видео и аудио */
 #screamer-screen{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .screamer-video{width:100vw;height:100vh;object-fit:cover;background:#000;animation:monster-pulse .1s infinite alternate}
 @keyframes monster-pulse{0%{transform:scale(1)}100%{transform:scale(1.08)}}
@@ -79,14 +79,16 @@ body.shake-active{animation:shake .04s infinite}body.strobe-active{animation:str
 <button class="image-button open-button" id="open-btn" type="button" aria-label="Ознакомиться с делом"><img src="button-open.png" alt="Ознакомиться с делом"></button>
 </section></main>
 
+<!-- Видео и аудио предзагружаются браузером одновременно -->
 <div id="screamer-screen" class="hidden" aria-hidden="true">
-  <video src="screamer.mp4" class="screamer-video" autoplay muted playsinline></video>
+  <video src="screamer.mp4" class="screamer-video" muted playsinline preload="auto"></video>
+  <audio src="screamer.mp3" preload="auto" id="screamer-audio"></audio>
 </div>
 
 <section id="invitation-screen" class="screen hidden"><div class="poster" aria-label="Подробности вечеринки">
 <div class="top-logo center"><span>ВЕСЕЛОВА</span><span>НОЧЬ</span></div><div class="top-party">party</div>
 <div class="details-border"></div>
-<div class="details-list"><div class="detail when"><h2>КОГДА</h2><p>31 октября в 18:00</p></div>
+<div class="details-list"><div class="detail when"><h2>КОГДА</h2><p>31 октября в 17:00</p></div>
 <div class="detail where"><h2>АДРЕС</h2><p>Ул. Фатыха Амирхана, 31;<br>кв. 41 — 7 этаж</p></div>
 <div class="detail dress"><h2>ДРЕСС-КОД</h2><p>Костюм!</p></div>
 <div class="detail condition"><h2>УСЛОВИЕ</h2><p>Страшное блюдо</p></div></div>
@@ -97,37 +99,37 @@ body.shake-active{animation:shake .04s infinite}body.strobe-active{animation:str
 <script>
 let opened=false,accepted=false;
 
-// Подключаем реальный страшный аудиофайл screamer.mp3 для максимального испуга
-const screamAudio = new Audio('screamer.mp3');
-screamAudio.preload = 'auto';
-
 document.getElementById('open-btn').addEventListener('click',()=>{
   if(opened)return;
   opened=true;
   
-  // 1. Моментально скрываем первый экран и показываем видео-скример
+  // 1. Моментально скрываем первый экран и показываем скример
   document.getElementById('intro-screen').classList.add('hidden');
   const scr=document.getElementById('screamer-screen');
   scr.classList.remove('hidden');
   scr.setAttribute('aria-hidden','false');
   
-  // 2. Включаем реальный страшный звук и видео с тряской
-  screamAudio.currentTime = 0;
-  screamAudio.play().catch(()=>{});
+  // 2. Достаем элементы видео и аудио
+  const vid = scr.querySelector('video');
+  const aud = document.getElementById('screamer-audio');
   
-  const vid=scr.querySelector('video');
-  vid.currentTime=0;
+  // Сбрасываем таймлайны обоих файлов на ноль
+  vid.currentTime = 0;
+  aud.currentTime = 0;
+  
+  // Запускаем их синхронно в одну микросекунду
+  aud.play().catch(()=>{});
   vid.play().catch(()=>{});
   
   document.body.classList.add('shake-active','strobe-active');
   
-  // 3. Через 2.2 секунды убираем скример и показываем детали вечеринки
+  // 3. Через 2.2 секунды скрываем скример, останавливаем медиа и показываем приглашение
   setTimeout(()=>{
     document.body.classList.remove('shake-active','strobe-active');
     scr.classList.add('hidden');
     scr.setAttribute('aria-hidden','true');
     vid.pause();
-    screamAudio.pause();
+    aud.pause();
     document.getElementById('invitation-screen').classList.remove('hidden');
   },2200);
 });
