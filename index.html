@@ -41,13 +41,12 @@ body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
 .final-copy{top:69.7%;left:14%;width:72%;font-size:2.78cqw;line-height:1.4;font-weight:300;text-align:center}
 .accept-button{top:82%;left:19%;width:62%}
 
-/* Плавное и медленное появление фона и текста по очереди */
+/* Плавное появление фона и текста на первом экране */
 @keyframes scene-reveal{0%{opacity:0;filter:blur(18px) brightness(.15);clip-path:inset(0 45% 0 45%)}60%{opacity:1;filter:blur(3px) brightness(1.2);clip-path:inset(0 0 0 0)}100%{opacity:1;filter:blur(0) brightness(1);clip-path:inset(0 0 0 0)}}
 @keyframes second-reveal{0%{opacity:0;transform:scale(1.15);filter:blur(18px) brightness(2)}100%{opacity:1;transform:scale(1);filter:blur(0) brightness(1)}}
 @keyframes title-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
 #intro-screen .poster{animation:scene-reveal 1.8s cubic-bezier(.2,.6,.2,1) both}
-
 #intro-screen .eyebrow{animation:title-rise .9s ease both;animation-delay:0.5s}
 #intro-screen .main-title{animation:title-rise .9s ease both;animation-delay:0.8s}
 #intro-screen .night-title{animation:title-rise .9s ease both;animation-delay:1.0s}
@@ -58,14 +57,15 @@ body{font-family:OpenCond,'Arial Narrow',sans-serif;overflow-x:hidden}
 
 #invitation-screen:not(.hidden) .poster{animation:second-reveal 1.4s cubic-bezier(.2,.7,.2,1) both}
 
-/* Экран скримера с видеофайлом mp4 */
+/* Мгновенный скример с видео во весь экран */
 #screamer-screen{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.screamer-video{width:100vw;height:100vh;object-fit:cover;background:#000;animation:monster-pulse .12s infinite alternate}
-@keyframes monster-pulse{0%{transform:scale(1)}100%{transform:scale(1.06)}}
+.screamer-video{width:100vw;height:100vh;object-fit:cover;background:#000;animation:monster-pulse .1s infinite alternate}
+@keyframes monster-pulse{0%{transform:scale(1)}100%{transform:scale(1.08)}}
 
-@keyframes shake{0%{transform:translate(1px,1px) rotate(0)}25%{transform:translate(-7px,-5px) rotate(-4deg)}50%{transform:translate(7px,5px) rotate(4deg)}75%{transform:translate(-5px,5px) rotate(-2deg)}100%{transform:translate(5px,-5px) rotate(2deg)}}
+@keyframes shake{0%{transform:translate(1px,1px) rotate(0)}25%{transform:translate(-8px,-6px) rotate(-5deg)}50%{transform:translate(8px,6px) rotate(5deg)}75%{transform:translate(-6px,6px) rotate(-3deg)}100%{transform:translate(6px,-6px) rotate(3deg)}}
 @keyframes strobe{0%,100%{background-color:#000}50%{background-color:#900}}
-body.shake-active{animation:shake .05s infinite}body.strobe-active{animation:strobe .07s infinite}
+body.shake-active{animation:shake .04s infinite}body.strobe-active{animation:strobe .06s infinite}
+
 .particle{position:fixed;top:-60px;pointer-events:none;z-index:100;animation:fall linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg) scale(.5);opacity:0}}
 .status{position:fixed;z-index:110;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:90vw;width:max-content;background:#1d100d;color:#ffe5b0;padding:14px 20px;border:1px solid #ba241c;border-radius:14px;text-align:center;box-shadow:0 8px 30px #000a;font-size:16px}
 @media(prefers-reduced-motion:reduce){.image-button,.screamer-video,#intro-screen .poster,#intro-screen .poster>*,#invitation-screen .poster{animation:none!important;transition:none!important}}
@@ -97,93 +97,39 @@ body.shake-active{animation:shake .05s infinite}body.strobe-active{animation:str
 <script>
 let opened=false,accepted=false;
 
-function playScreamSound(){
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC)return;
-    const ctx=new AC();
-    
-    const subOsc=ctx.createOscillator();
-    const subGain=ctx.createGain();
-    subOsc.type='sawtooth';
-    subOsc.frequency.setValueAtTime(60,ctx.currentTime);
-    subOsc.frequency.exponentialRampToValueAtTime(150,ctx.currentTime+1.8);
-    subGain.gain.setValueAtTime(0.8,ctx.currentTime);
-    subGain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+2.0);
-    subOsc.connect(subGain);
-    subGain.connect(ctx.destination);
-    
-    const screamer=ctx.createOscillator();
-    const screamerGain=ctx.createGain();
-    screamer.type='square';
-    screamer.frequency.setValueAtTime(800,ctx.currentTime);
-    screamer.frequency.setValueAtTime(2400,ctx.currentTime+0.1);
-    screamer.frequency.setValueAtTime(1200,ctx.currentTime+0.3);
-    screamer.frequency.setValueAtTime(3200,ctx.currentTime+0.5);
-    screamer.frequency.exponentialRampToValueAtTime(300,ctx.currentTime+1.8);
-    
-    screamerGain.gain.setValueAtTime(0.01,ctx.currentTime);
-    screamerGain.gain.linearRampToValueAtTime(0.7,ctx.currentTime+0.05);
-    screamerGain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+1.8);
-    screamer.connect(screamerGain);
-    screamerGain.connect(ctx.destination);
-    
-    const bufferSize=ctx.sampleRate*2;
-    const noiseBuffer=ctx.createBuffer(1,bufferSize,ctx.sampleRate);
-    const output=noiseBuffer.getChannelData(0);
-    for(let i=0;i<bufferSize;i++){output[i]=Math.random()*2-1;}
-    const whiteNoise=ctx.createBufferSource();
-    whiteNoise.buffer=noiseBuffer;
-    
-    const filter=ctx.createBiquadFilter();
-    filter.type='bandpass';
-    filter.frequency.setValueAtTime(1200,ctx.currentTime);
-    filter.Q.value=5;
-    
-    const noiseGain=ctx.createGain();
-    noiseGain.gain.setValueAtTime(0.9,ctx.currentTime);
-    noiseGain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+1.8);
-    
-    whiteNoise.connect(filter);
-    filter.connect(noiseGain);
-    noiseGain.connect(ctx.destination);
-    
-    subOsc.start();
-    screamer.start();
-    whiteNoise.start();
-    
-    subOsc.stop(ctx.currentTime+2.0);
-    screamer.stop(ctx.currentTime+2.0);
-    whiteNoise.stop(ctx.currentTime+2.0);
-    
-    setTimeout(()=>ctx.close().catch(()=>{}),2500);
-  }catch(e){console.warn('Звук недоступен',e)}
-}
+// Подключаем реальный страшный аудиофайл screamer.mp3 для максимального испуга
+const screamAudio = new Audio('screamer.mp3');
+screamAudio.preload = 'auto';
 
 document.getElementById('open-btn').addEventListener('click',()=>{
   if(opened)return;
   opened=true;
-  playScreamSound();
   
+  // 1. Моментально скрываем первый экран и показываем видео-скример
+  document.getElementById('intro-screen').classList.add('hidden');
   const scr=document.getElementById('screamer-screen');
+  scr.classList.remove('hidden');
+  scr.setAttribute('aria-hidden','false');
+  
+  // 2. Включаем реальный страшный звук и видео с тряской
+  screamAudio.currentTime = 0;
+  screamAudio.play().catch(()=>{});
+  
   const vid=scr.querySelector('video');
-  vid.currentTime=0; // сбрасываем видео на начало
-  vid.play().catch(()=>{}); // запускаем воспроизведение
-
+  vid.currentTime=0;
+  vid.play().catch(()=>{});
+  
+  document.body.classList.add('shake-active','strobe-active');
+  
+  // 3. Через 2.2 секунды убираем скример и показываем детали вечеринки
   setTimeout(()=>{
-    document.getElementById('intro-screen').classList.add('hidden');
-    scr.classList.remove('hidden');
-    scr.setAttribute('aria-hidden','false');
-    document.body.classList.add('shake-active','strobe-active');
-    
-    setTimeout(()=>{
-      document.body.classList.remove('shake-active','strobe-active');
-      scr.classList.add('hidden');
-      scr.setAttribute('aria-hidden','true');
-      vid.pause(); // останавливаем видео при скрытии
-      document.getElementById('invitation-screen').classList.remove('hidden');
-    },2200);
-  },300);
+    document.body.classList.remove('shake-active','strobe-active');
+    scr.classList.add('hidden');
+    scr.setAttribute('aria-hidden','true');
+    vid.pause();
+    screamAudio.pause();
+    document.getElementById('invitation-screen').classList.remove('hidden');
+  },2200);
 });
 
 document.getElementById('rsvp-btn').addEventListener('click',()=>{if(accepted)return;accepted=true;const s=document.getElementById('status-message');s.textContent='🎉 Ты в деле! Ждём тебя на вечеринке!';s.classList.remove('hidden');setTimeout(()=>s.classList.add('hidden'),5500);for(let i=0;i<45;i++){let p=document.createElement('div');p.className='particle';p.textContent=['🎃','👻','🦇','💀','🍬','🕷️'][Math.floor(Math.random()*6)];p.style.left=Math.random()*100+'vw';p.style.fontSize=(22+Math.random()*20)+'px';p.style.animationDuration=(Math.random()*2+1.5)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),3800)}});
